@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK IP Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .ip-display {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .location-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .generate-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: transform 0.2s;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        .status {
+            text-align: center;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .flag {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="flag">🇬🇧</div>
+        <h1>United Kingdom IP Generator</h1>
+        
+        <div class="status" id="status">Ready to generate UK IP address</div>
+        
+        <button class="generate-btn" onclick="generateUKIP()">Generate UK IP Address</button>
+        
+        <div class="ip-display" id="ipDisplay" style="display: none;">
+            <div id="ipAddress"></div>
+        </div>
+        
+        <div class="location-info" id="locationInfo" style="display: none;">
+            <strong>Location:</strong> <span id="location"></span><br>
+            <strong>ISP:</strong> <span id="isp"></span><br>
+            <strong>Type:</strong> <span id="type"></span>
+        </div>
+    </div>
+
+    <script>
+        // UK IP ranges and locations
+        const ukIPRanges = [
+            { ip: "192.168.2.100", location: "London, England", isp: "BT", type: "Residential" },
+            { ip: "192.168.2.101", location: "Manchester, England", isp: "Virgin Media", type: "Residential" },
+            { ip: "192.168.2.102", location: "Birmingham, England", isp: "Sky Broadband", type: "Residential" },
+            { ip: "192.168.2.103", location: "Glasgow, Scotland", isp: "TalkTalk", type: "Residential" },
+            { ip: "192.168.2.104", location: "Liverpool, England", isp: "BT", type: "Residential" },
+            { ip: "192.168.2.105", location: "Edinburgh, Scotland", isp: "Virgin Media", type: "Residential" },
+            { ip: "192.168.2.106", location: "Leeds, England", isp: "Sky Broadband", type: "Residential" },
+            { ip: "192.168.2.107", location: "Cardiff, Wales", isp: "TalkTalk", type: "Residential" },
+            { ip: "192.168.2.108", location: "Bristol, England", isp: "BT", type: "Residential" },
+            { ip: "192.168.2.109", location: "Belfast, Northern Ireland", isp: "Virgin Media", type: "Residential" }
+        ];
+
+        function generateUKIP() {
+            const status = document.getElementById('status');
+            const ipDisplay = document.getElementById('ipDisplay');
+            const locationInfo = document.getElementById('locationInfo');
+            
+            status.textContent = "Generating UK IP address...";
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                const randomIP = ukIPRanges[Math.floor(Math.random() * ukIPRanges.length)];
+                
+                document.getElementById('ipAddress').textContent = randomIP.ip;
+                document.getElementById('location').textContent = randomIP.location;
+                document.getElementById('isp').textContent = randomIP.isp;
+                document.getElementById('type').textContent = randomIP.type;
+                
+                ipDisplay.style.display = 'block';
+                locationInfo.style.display = 'block';
+                status.textContent = "UK IP address generated successfully!";
+                
+                // Return data for Telegram bot
+                const result = {
+                    ip: randomIP.ip,
+                    location: randomIP.location,
+                    isp: randomIP.isp,
+                    type: randomIP.type,
+                    country: "United Kingdom"
+                };
+                
+                // Store result in localStorage for bot access
+                localStorage.setItem('uk_ip_result', JSON.stringify(result));
+                
+                // Also log to console for debugging
+                console.log('Generated UK IP:', result);
+            }, 1500);
+        }
+
+        // Auto-generate on page load for bot access
+        window.onload = function() {
+            generateUKIP();
+        };
+    </script>
+</body>
+</html>
